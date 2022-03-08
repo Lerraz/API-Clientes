@@ -794,7 +794,11 @@ routes.put('/clientes/atualizar/:id', verifyJWT, (req, res) => {
         }
     })
     db = newDB
-    return res.status(200).json(db)
+    let putDB = db.filter(item => {
+        if (item.id == id)
+            return item
+        })
+    return res.status(400).json(Object(putDB[0]))
 })
 
 routes.delete('/clientes/deletar/:id', verifyJWT, (req, res) => {
@@ -819,7 +823,7 @@ routes.delete('/clientes/deletar/:id', verifyJWT, (req, res) => {
             return item
     })
     db = newDB
-    return res.status(200).json(db)
+    return res.status(204).json()
 })
 
 module.exports = routes

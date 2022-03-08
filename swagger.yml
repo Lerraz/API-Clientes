@@ -367,52 +367,8 @@ paths:
       parameters:
         - $ref : "#/components/parameters/id"
       responses:
-        '200':
+        '204':
           description: Cliente Excluido.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  required:
-                  - id
-                  - nome
-                  - idade
-                  - cpf
-                  - data_nasc
-                  - cep
-                  - endereco
-                  - numero
-                  - bairro
-                  - cidade
-                  - estado
-                  - celular
-                  properties:
-                    id:
-                      $ref: '#/components/schemas/id'
-                    nome:
-                      $ref: '#/components/schemas/nome'
-                    idade:
-                      $ref: '#/components/schemas/idade'
-                    cpf:
-                      $ref: '#/components/schemas/cpf'
-                    data_nasc:
-                      $ref: '#/components/schemas/data_nasc'
-                    cep:
-                      $ref: '#/components/schemas/cep'
-                    endereco:
-                      $ref: '#/components/schemas/endereco'
-                    numero:
-                      $ref: '#/components/schemas/numero'
-                    bairro:
-                      $ref: '#/components/schemas/bairro'
-                    cidade:
-                      $ref: '#/components/schemas/cidade'
-                    estado:
-                      $ref: '#/components/schemas/estado'
-                    telefone_fixo:
-                      $ref: '#/components/schemas/telefone_fixo'
-                    celular:
-                      $ref: '#/components/schemas/celular'
         '400':
           description: Estrutura de erros.
           content:
