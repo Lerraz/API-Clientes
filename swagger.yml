@@ -1,0 +1,602 @@
+openapi: 3.0.0
+info:
+  description: Serviço responsável pelo gerenciamento de clientes.
+  version: "1.0.0"
+  title: Gerenciamento de Clientes
+servers:
+  - url: 'http://localhost:3000/clientes'
+
+paths:
+  /listar:
+    get:
+      tags:
+        - Clientes
+      summary: Lista o cadastro de clientes.
+      description: |
+      parameters:
+        - $ref: "#/components/parameters/nome"
+        - $ref: "#/components/parameters/idade"
+        - $ref: "#/components/parameters/cpf"
+        - $ref: "#/components/parameters/data_nasc"
+        - $ref: "#/components/parameters/cep"
+        - $ref: "#/components/parameters/endereco"
+        - $ref: "#/components/parameters/numero"
+        - $ref: "#/components/parameters/bairro"
+        - $ref: "#/components/parameters/cidade"
+        - $ref: "#/components/parameters/estado"
+        - $ref: "#/components/parameters/telefone_fixo"
+        - $ref: "#/components/parameters/celular"
+      responses:
+        '200':
+          description: Objeto retornado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - id
+                  - nome
+                  - idade
+                  - cpf
+                  - data_nasc
+                  - cep
+                  - endereco
+                  - numero
+                  - bairro
+                  - cidade
+                  - estado
+                  - celular
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/id'
+                    nome:
+                      $ref: '#/components/schemas/nome'
+                    idade:
+                      $ref: '#/components/schemas/idade'
+                    cpf:
+                      $ref: '#/components/schemas/cpf'
+                    data_nasc:
+                      $ref: '#/components/schemas/data_nasc'
+                    cep:
+                      $ref: '#/components/schemas/cep'
+                    endereco:
+                      $ref: '#/components/schemas/endereco'
+                    numero:
+                      $ref: '#/components/schemas/numero'
+                    bairro:
+                      $ref: '#/components/schemas/bairro'
+                    cidade:
+                      $ref: '#/components/schemas/cidade'
+                    estado:
+                      $ref: '#/components/schemas/estado'
+                    telefone_fixo:
+                      $ref: '#/components/schemas/telefone_fixo'
+                    celular:
+                      $ref: '#/components/schemas/celular'
+        '400':
+          description: Estrutura de erros.
+          content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: "O campo 'xpto_field' não é válido"
+        '401':
+          description: Usuário não está autorizado, faça login novamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: Usuário não está autorizado, faça login novamente
+        '403':
+          description: Usuário não tem permissão para acessar o recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: Usuário não tem permissão para acessar o recurso
+  /cadastrar:  
+    post:
+      tags:
+        - Clientes
+      summary: Cadastrar novo cliente.
+      description: |
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                  type: object
+                  required:
+                  - nome
+                  - cpf
+                  - data_nasc
+                  - cep
+                  - endereco
+                  - numero
+                  - bairro
+                  - cidade
+                  - estado
+                  - celular
+                  properties:
+                    nome:
+                      $ref: '#/components/schemas/nome'
+                    cpf:
+                      $ref: '#/components/schemas/cpf'
+                    data_nasc:
+                      $ref: '#/components/schemas/data_nasc'
+                    cep:
+                      $ref: '#/components/schemas/cep'
+                    endereco:
+                      $ref: '#/components/schemas/endereco'
+                    numero:
+                      $ref: '#/components/schemas/numero'
+                    bairro:
+                      $ref: '#/components/schemas/bairro'
+                    cidade:
+                      $ref: '#/components/schemas/cidade'
+                    estado:
+                      $ref: '#/components/schemas/estado'
+                    telefone_fixo:
+                      $ref: '#/components/schemas/telefone_fixo'
+                    celular:
+                      $ref: '#/components/schemas/celular'
+      responses:
+        '201':
+          description: Cliente cadastrado.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  required:
+                  - id
+                  - nome
+                  - idade
+                  - cpf
+                  - data_nasc
+                  - cep
+                  - endereco
+                  - numero
+                  - bairro
+                  - cidade
+                  - estado
+                  - celular
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/id'
+                    nome:
+                      $ref: '#/components/schemas/nome'
+                    idade:
+                      $ref: '#/components/schemas/idade'
+                    cpf:
+                      $ref: '#/components/schemas/cpf'
+                    data_nasc:
+                      $ref: '#/components/schemas/data_nasc'
+                    cep:
+                      $ref: '#/components/schemas/cep'
+                    endereco:
+                      $ref: '#/components/schemas/endereco'
+                    numero:
+                      $ref: '#/components/schemas/numero'
+                    bairro:
+                      $ref: '#/components/schemas/bairro'
+                    cidade:
+                      $ref: '#/components/schemas/cidade'
+                    estado:
+                      $ref: '#/components/schemas/estado'
+                    telefone_fixo:
+                      $ref: '#/components/schemas/telefone_fixo'
+                    celular:
+                      $ref: '#/components/schemas/celular'
+        '400':
+          description: Estrutura de erros.
+          content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: "O campo 'xpto_field' não é válido"
+        '401':
+          description: Usuário não está autorizado, faça login novamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: Usuário não está autorizado, faça login novamente
+        '403':
+          description: Usuário não tem permissão para acessar o recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: Usuário não tem permissão para acessar o recurso
+  /atualizar/{id}:
+    put:
+      tags:
+      - Clientes
+      summary: Atualiza o cadastro de um cliente.
+      description: |
+      parameters:
+        - $ref : "#/components/parameters/id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                  type: object
+                  properties:
+                    nome:
+                      $ref: '#/components/schemas/nome'
+                    cpf:
+                      $ref: '#/components/schemas/cpf'
+                    data_nasc:
+                      $ref: '#/components/schemas/data_nasc'
+                    cep:
+                      $ref: '#/components/schemas/cep'
+                    endereco:
+                      $ref: '#/components/schemas/endereco'
+                    numero:
+                      $ref: '#/components/schemas/numero'
+                    bairro:
+                      $ref: '#/components/schemas/bairro'
+                    cidade:
+                      $ref: '#/components/schemas/cidade'
+                    estado:
+                      $ref: '#/components/schemas/estado'
+                    telefone_fixo:
+                      $ref: '#/components/schemas/telefone_fixo'
+                    celular:
+                      $ref: '#/components/schemas/celular'
+      responses:
+        '200':
+          description: Cliente Atualizado.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  required:
+                  - id
+                  - nome
+                  - idade
+                  - cpf
+                  - data_nasc
+                  - cep
+                  - endereco
+                  - numero
+                  - bairro
+                  - cidade
+                  - estado
+                  - celular
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/id'
+                    nome:
+                      $ref: '#/components/schemas/nome'
+                    idade:
+                      $ref: '#/components/schemas/idade'
+                    cpf:
+                      $ref: '#/components/schemas/cpf'
+                    data_nasc:
+                      $ref: '#/components/schemas/data_nasc'
+                    cep:
+                      $ref: '#/components/schemas/cep'
+                    endereco:
+                      $ref: '#/components/schemas/endereco'
+                    numero:
+                      $ref: '#/components/schemas/numero'
+                    bairro:
+                      $ref: '#/components/schemas/bairro'
+                    cidade:
+                      $ref: '#/components/schemas/cidade'
+                    estado:
+                      $ref: '#/components/schemas/estado'
+                    telefone_fixo:
+                      $ref: '#/components/schemas/telefone_fixo'
+                    celular:
+                      $ref: '#/components/schemas/celular'
+        '400':
+          description: Estrutura de erros.
+          content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: "O campo 'xpto_field' não é válido"
+        '401':
+          description: Usuário não está autorizado, faça login novamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: Usuário não está autorizado, faça login novamente
+        '403':
+          description: Usuário não tem permissão para acessar o recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: Usuário não tem permissão para acessar o recurso
+        '404':
+          description: O campo 'id' não foi encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: O campo 'id' não foi encontrado
+  /deletar/{id}:
+    delete:
+      tags:
+      - Clientes
+      summary: Deleta o cadastro de um cliente.
+      description: |
+      parameters:
+        - $ref : "#/components/parameters/id"
+      responses:
+        '200':
+          description: Cliente Excluido.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  required:
+                  - id
+                  - nome
+                  - idade
+                  - cpf
+                  - data_nasc
+                  - cep
+                  - endereco
+                  - numero
+                  - bairro
+                  - cidade
+                  - estado
+                  - celular
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/id'
+                    nome:
+                      $ref: '#/components/schemas/nome'
+                    idade:
+                      $ref: '#/components/schemas/idade'
+                    cpf:
+                      $ref: '#/components/schemas/cpf'
+                    data_nasc:
+                      $ref: '#/components/schemas/data_nasc'
+                    cep:
+                      $ref: '#/components/schemas/cep'
+                    endereco:
+                      $ref: '#/components/schemas/endereco'
+                    numero:
+                      $ref: '#/components/schemas/numero'
+                    bairro:
+                      $ref: '#/components/schemas/bairro'
+                    cidade:
+                      $ref: '#/components/schemas/cidade'
+                    estado:
+                      $ref: '#/components/schemas/estado'
+                    telefone_fixo:
+                      $ref: '#/components/schemas/telefone_fixo'
+                    celular:
+                      $ref: '#/components/schemas/celular'
+        '400':
+          description: Estrutura de erros.
+          content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: "O campo 'xpto_field' não é válido"
+        '401':
+          description: Usuário não está autorizado, faça login novamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: Usuário não está autorizado, faça login novamente
+        '403':
+          description: Usuário não tem permissão para acessar o recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: Usuário não tem permissão para acessar o recurso
+        '404':
+          description: O campo 'id' não foi encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: O campo 'id' não foi encontrado
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    id:
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/id'
+    nome:
+      in: query
+      name: nome
+      required: false
+      schema:
+        $ref: '#/components/schemas/nome'
+    idade:
+      in: query
+      name: idade
+      required: false
+      schema:
+        $ref: '#/components/schemas/idade'
+    cpf:
+      in: query
+      name: cpf
+      required: false
+      schema:
+        $ref: '#/components/schemas/cpf'
+    data_nasc:
+      in: query
+      name: data_nasc
+      required: false
+      schema:
+        $ref: '#/components/schemas/data_nasc'
+    cep:
+      in: query
+      name: cep
+      required: false
+      schema:
+        $ref: '#/components/schemas/cep'
+    endereco:
+      in: query
+      name: endereco
+      required: false
+      schema:
+        $ref: '#/components/schemas/endereco'
+    numero:
+      in: query
+      name: numero
+      required: false
+      schema:
+        $ref: '#/components/schemas/numero'
+    bairro:
+      in: query
+      name: bairro
+      required: false
+      schema:
+        $ref: '#/components/schemas/bairro'
+    cidade:
+      in: query
+      name: cidade
+      required: false
+      schema:
+        $ref: '#/components/schemas/cidade'
+    estado:
+      in: query
+      name: estado
+      required: false
+      schema:
+        $ref: '#/components/schemas/estado'
+    telefone_fixo:
+      in: query
+      name: telefone_fixo
+      required: false
+      schema:
+        $ref: '#/components/schemas/telefone_fixo'
+    celular:
+      in: query
+      name: celular
+      required: false
+      schema:
+        $ref: '#/components/schemas/celular'
+  schemas:
+    id:
+      type: integer
+      format: int32
+      description: ID do cadastro do cliente.
+      example: 1
+    nome:
+      type: string
+      description: Nome do cliente.
+      example: "Ruan Henrique Emanuel de Paula"
+    idade:
+      type: integer
+      format: int32
+      description: Idade do cliente.
+      example: 21
+    cpf:
+      type: string
+      description: CPF do cliente.
+      example: "801.192.385-43"
+    data_nasc:
+      type: string
+      description: Data de Nascimento do cliente.
+      example: "16/01/2001"
+    cep:
+      type: string
+      description: CEP do endereço residencial do cliente.
+      example: "58108-168"
+    endereco:
+      type: string
+      description: Logradouro residencial do cliente.
+      example: "Rua Ayrton Sena"
+    numero:
+      type: integer
+      format: int32
+      description: Número do endereço residencial do cliente.
+      example: 985
+    bairro:
+      type: string
+      description: Bairro do endereço residencial do cliente.
+      example: Renascer
+    cidade:
+      type: string
+      description: Cidade do endereço residencial do cliente.
+      example: "Cabedelo"
+    estado:
+      type: string
+      description: Estado (UF) do endereço residencial do cliente.
+      example: "PB"
+    telefone_fixo: 
+      type: string
+      description: Número do telefone fixo do cliente.
+      example: "(95) 2863-9907"
+    celular:
+      type: string
+      description: Número do telefone celular do cliente.
+      example: "(95) 98262-4303"
