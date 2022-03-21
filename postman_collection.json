@@ -1,0 +1,4057 @@
+{
+	"info": {
+		"_postman_id": "e363b765-c356-4a50-b79b-a315ede0e811",
+		"name": "Serviço de Clientes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET /listar",
+			"item": [
+				{
+					"name": "POST /login",
+					"item": [
+						{
+							"name": "200 - Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"token = jsonData.token;\r",
+											"\r",
+											"pm.globals.set(\"TOKEN_200\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\" : \"admin\",\r\n    \"senha\" : \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/login",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Login User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"token = jsonData.token;\r",
+											"\r",
+											"pm.globals.set(\"TOKEN_403\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\" : \"user\",\r\n    \"senha\" : \"abc\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/login",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "2XX",
+					"item": [
+						{
+							"name": "200 - Sucesso",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"id\": {\r",
+											"          \"type\": \"integer\"\r",
+											"        },\r",
+											"        \"nome\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"idade\": {\r",
+											"          \"type\": \"integer\"\r",
+											"        },\r",
+											"        \"cpf\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"data_nasc\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"cep\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"endereco\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"numero\": {\r",
+											"          \"type\": \"integer\"\r",
+											"        },\r",
+											"        \"bairro\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"cidade\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"estado\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"telefone_fixo\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"celular\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"id\",\"nome\",\"idade\",\"cpf\",\"data_nasc\",\"cep\",\"endereco\",\"numero\",\"bairro\",\"cidade\",\"estado\",\"celular\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									],
+									"query": [
+										{
+											"key": "idade",
+											"value": "56",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Sucesso todos params",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"id\": {\r",
+											"          \"type\": \"integer\"\r",
+											"        },\r",
+											"        \"nome\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"idade\": {\r",
+											"          \"type\": \"integer\"\r",
+											"        },\r",
+											"        \"cpf\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"data_nasc\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"cep\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"endereco\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"numero\": {\r",
+											"          \"type\": \"integer\"\r",
+											"        },\r",
+											"        \"bairro\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"cidade\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"estado\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"telefone_fixo\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"celular\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"id\",\"nome\",\"idade\",\"cpf\",\"data_nasc\",\"cep\",\"endereco\",\"numero\",\"bairro\",\"cidade\",\"estado\",\"celular\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar?nome=Ruan Henrique Emanuel de Paula&idade=21&cpf=801.192.385-43&data_nasc=16/01/2001&cep=58108-168&endereco=Rua Ayrton Sena&numero=985&bairro=Renascer&cidade=Cabedelo&estado=PB&telefone_fixo=(95) 2863-9907&celular=(95) 98262-4303",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									],
+									"query": [
+										{
+											"key": "nome",
+											"value": "Ruan Henrique Emanuel de Paula"
+										},
+										{
+											"key": "idade",
+											"value": "21"
+										},
+										{
+											"key": "cpf",
+											"value": "801.192.385-43"
+										},
+										{
+											"key": "data_nasc",
+											"value": "16/01/2001"
+										},
+										{
+											"key": "cep",
+											"value": "58108-168"
+										},
+										{
+											"key": "endereco",
+											"value": "Rua Ayrton Sena"
+										},
+										{
+											"key": "numero",
+											"value": "985"
+										},
+										{
+											"key": "bairro",
+											"value": "Renascer"
+										},
+										{
+											"key": "cidade",
+											"value": "Cabedelo"
+										},
+										{
+											"key": "estado",
+											"value": "PB"
+										},
+										{
+											"key": "telefone_fixo",
+											"value": "(95) 2863-9907"
+										},
+										{
+											"key": "celular",
+											"value": "(95) 98262-4303"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Sucesso retorno vazio",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Está vazio\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"        pm.expect(jsonData).is.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar?nome=Ruan Henrique Emanuel de Paula&idade=22&cpf=801.192.385-43&data_nasc=16/01/2001&cep=58108-168&endereco=Rua Ayrton Sena&numero=985&bairro=Renascer&cidade=Cabedelo&estado=PB&telefone_fixo=(95) 2863-9907&celular=(95) 98262-4303",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									],
+									"query": [
+										{
+											"key": "nome",
+											"value": "Ruan Henrique Emanuel de Paula"
+										},
+										{
+											"key": "idade",
+											"value": "22"
+										},
+										{
+											"key": "cpf",
+											"value": "801.192.385-43"
+										},
+										{
+											"key": "data_nasc",
+											"value": "16/01/2001"
+										},
+										{
+											"key": "cep",
+											"value": "58108-168"
+										},
+										{
+											"key": "endereco",
+											"value": "Rua Ayrton Sena"
+										},
+										{
+											"key": "numero",
+											"value": "985"
+										},
+										{
+											"key": "bairro",
+											"value": "Renascer"
+										},
+										{
+											"key": "cidade",
+											"value": "Cabedelo"
+										},
+										{
+											"key": "estado",
+											"value": "PB"
+										},
+										{
+											"key": "telefone_fixo",
+											"value": "(95) 2863-9907"
+										},
+										{
+											"key": "celular",
+											"value": "(95) 98262-4303"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "4XX",
+					"item": [
+						{
+							"name": "400 - Request Body preenchido",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Erro do Body Request preenchido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O Body da Request precisa estar vazio\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"body\":\"preenchido\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Campos Inexistentes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'id' não é válido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'id' não é válido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'genero' não é válido\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'genero' não é válido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'UF' não é válido\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'UF' não é válido\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar?id=5&genero=masculino&UF=MG",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5"
+										},
+										{
+											"key": "genero",
+											"value": "masculino"
+										},
+										{
+											"key": "UF",
+											"value": "MG"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Parametros em Branco",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'nome' vazio\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'nome' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'idade' vazio\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'idade' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cpf' vazio\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'cpf' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'data_nasc' vazio\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'data_nasc' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cep' vazio\", function () {\r",
+											"    pm.expect(jsonData[4].Message).to.contain(\"O campo 'cep' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'endereco' vazio\", function () {\r",
+											"    pm.expect(jsonData[5].Message).to.contain(\"O campo 'endereco' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'numero' vazio\", function () {\r",
+											"    pm.expect(jsonData[6].Message).to.contain(\"O campo 'numero' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'bairro' vazio\", function () {\r",
+											"    pm.expect(jsonData[7].Message).to.contain(\"O campo 'bairro' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cidade' vazio\", function () {\r",
+											"    pm.expect(jsonData[8].Message).to.contain(\"O campo 'cidade' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'estado' vazio\", function () {\r",
+											"    pm.expect(jsonData[9].Message).to.contain(\"O campo 'estado' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'telefone_fixo' vazio\", function () {\r",
+											"    pm.expect(jsonData[10].Message).to.contain(\"O campo 'telefone_fixo' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'celular' vazio\", function () {\r",
+											"    pm.expect(jsonData[11].Message).to.contain(\"O campo 'celular' está vazio\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar?nome=&idade=&cpf=&data_nasc=&cep=&endereco=&numero=&bairro=&cidade=&estado=&telefone_fixo=&celular=",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									],
+									"query": [
+										{
+											"key": "nome",
+											"value": ""
+										},
+										{
+											"key": "idade",
+											"value": ""
+										},
+										{
+											"key": "cpf",
+											"value": ""
+										},
+										{
+											"key": "data_nasc",
+											"value": ""
+										},
+										{
+											"key": "cep",
+											"value": ""
+										},
+										{
+											"key": "endereco",
+											"value": ""
+										},
+										{
+											"key": "numero",
+											"value": ""
+										},
+										{
+											"key": "bairro",
+											"value": ""
+										},
+										{
+											"key": "cidade",
+											"value": ""
+										},
+										{
+											"key": "estado",
+											"value": ""
+										},
+										{
+											"key": "telefone_fixo",
+											"value": ""
+										},
+										{
+											"key": "celular",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Tipagem Inválida",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'nome' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'nome' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'idade' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'idade' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cpf' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'cpf' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'data_nasc' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'data_nasc' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cep' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[4].Message).to.contain(\"O campo 'cep' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'endereco' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[5].Message).to.contain(\"O campo 'endereco' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'numero' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[6].Message).to.contain(\"O campo 'numero' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'bairro' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[7].Message).to.contain(\"O campo 'bairro' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cidade' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[8].Message).to.contain(\"O campo 'cidade' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'estado' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[9].Message).to.contain(\"O campo 'estado' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'telefone_fixo' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[10].Message).to.contain(\"O campo 'telefone_fixo' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'celular' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[11].Message).to.contain(\"O campo 'celular' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar?nome=123&idade=abc&cpf=12345678910&data_nasc=20/13/2020&cep=12345000&endereco=12345678&numero=abc&bairro=555&cidade=555&estado=55&telefone_fixo=1148877665&celular=11998877665",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									],
+									"query": [
+										{
+											"key": "nome",
+											"value": "123"
+										},
+										{
+											"key": "idade",
+											"value": "abc"
+										},
+										{
+											"key": "cpf",
+											"value": "12345678910"
+										},
+										{
+											"key": "data_nasc",
+											"value": "20/13/2020"
+										},
+										{
+											"key": "cep",
+											"value": "12345000"
+										},
+										{
+											"key": "endereco",
+											"value": "12345678"
+										},
+										{
+											"key": "numero",
+											"value": "abc"
+										},
+										{
+											"key": "bairro",
+											"value": "555"
+										},
+										{
+											"key": "cidade",
+											"value": "555"
+										},
+										{
+											"key": "estado",
+											"value": "55"
+										},
+										{
+											"key": "telefone_fixo",
+											"value": "1148877665"
+										},
+										{
+											"key": "celular",
+											"value": "11998877665"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401 - Não Autorizado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Usuário não Autorizado\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"Usuário não está autorizado, faça login novamente\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "123",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "403 - Sem Permissão",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Usuário sem Permissão\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"Usuário não tem permissão para acessar o recurso\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_403}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/listar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"listar"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "POST /cadastrar",
+			"item": [
+				{
+					"name": "POST /login",
+					"item": [
+						{
+							"name": "200 - Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"token = jsonData.token;\r",
+											"\r",
+											"pm.globals.set(\"TOKEN_200\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\" : \"admin\",\r\n    \"senha\" : \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/login",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Login User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"token = jsonData.token;\r",
+											"\r",
+											"pm.globals.set(\"TOKEN_403\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\" : \"user\",\r\n    \"senha\" : \"abc\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/login",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "2XX",
+					"item": [
+						{
+							"name": "201 - Sucesso",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"id\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"nome\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"idade\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"cpf\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"data_nasc\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"cep\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"endereco\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"numero\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"bairro\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"cidade\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"estado\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"telefone_fixo\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"celular\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\"id\",\"nome\",\"idade\",\"cpf\",\"data_nasc\",\"cep\",\"endereco\",\"numero\",\"bairro\",\"cidade\",\"estado\",\"celular\"]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Caio Lima Ferreira\",\r\n        \"cpf\": \"420.309.470-40\",\r\n        \"data_nasc\": \"12/05/1995\",\r\n        \"cep\": \"08576-260\",\r\n        \"endereco\": \"Rua Colômbia\",\r\n        \"numero\": 856,\r\n        \"bairro\": \"Vila Virgínia\",\r\n        \"cidade\": \"Itaquaquecetuba\",\r\n        \"estado\": \"SP\",\r\n        \"telefone_fixo\": \"(11) 2262-9966\",\r\n        \"celular\": \"(11) 98233-8744\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "201 - Sucesso Campos Obrigatórios",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"id\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"nome\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"idade\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"cpf\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"data_nasc\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"cep\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"endereco\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"numero\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"bairro\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"cidade\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"estado\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"telefone_fixo\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"celular\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\"id\",\"nome\",\"idade\",\"cpf\",\"data_nasc\",\"cep\",\"endereco\",\"numero\",\"bairro\",\"cidade\",\"estado\",\"celular\"]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Marli Beatriz Cardoso\",\r\n        \"cpf\": \"843.147.294-49\",\r\n        \"data_nasc\": \"13/02/1985\",\r\n        \"cep\": \"27320-440\",\r\n        \"endereco\": \"Rua Rosalina da Silva Dias\",\r\n        \"numero\": 495,\r\n        \"bairro\": \"Vista Alegre\",\r\n        \"cidade\": \"Barra Mansa\",\r\n        \"estado\": \"RJ\",\r\n        \"celular\": \"(24) 98702-0768\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "4XX",
+					"item": [
+						{
+							"name": "400 - Request Body sem preencher",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Erro do Body Request sem preencher\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O Body da Request está vazio, favor preencher\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Query Request preenchida",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Erro do Query Paramns preenchido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"Os Query params da Request precisam estar vazios\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Caio Lima Ferreira\",\r\n        \"cpf\": \"420.309.470-40\",\r\n        \"data_nasc\": \"12/05/1995\",\r\n        \"cep\": \"08576-260\",\r\n        \"endereco\": \"Rua Colômbia\",\r\n        \"numero\": 856,\r\n        \"bairro\": \"Vila Virgínia\",\r\n        \"cidade\": \"Itaquaquecetuba\",\r\n        \"estado\": \"SP\",\r\n        \"telefone_fixo\": \"(11) 2262-9966\",\r\n        \"celular\": \"(11) 98233-8744\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar?Query=preenchida",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									],
+									"query": [
+										{
+											"key": "Query",
+											"value": "preenchida"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Campos Inexistentes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'id' não é válido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'id' não é válido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'idade' não é válido\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'idade' não é válido\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'genero' não é válido\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'genero' não é válido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'UF' não é válido\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'UF' não é válido\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"id\": 3,\r\n        \"nome\": \"Caio Lima Ferreira\",\r\n        \"idade\": 26,\r\n        \"cpf\": \"420.309.470-40\",\r\n        \"data_nasc\": \"12/05/1995\",\r\n        \"genero\": \"masculino\",\r\n        \"cep\": \"08576-260\",\r\n        \"endereco\": \"Rua Colômbia\",\r\n        \"numero\": 856,\r\n        \"bairro\": \"Vila Virgínia\",\r\n        \"cidade\": \"Itaquaquecetuba\",\r\n        \"UF\": \"SP\",\r\n        \"telefone_fixo\": \"(11) 2262-9966\",\r\n        \"celular\": \"(11) 98233-8744\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Parametros em Branco",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'nome' vazio\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'nome' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cpf' vazio\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'cpf' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'data_nasc' vazio\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'data_nasc' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cep' vazio\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'cep' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'endereco' vazio\", function () {\r",
+											"    pm.expect(jsonData[4].Message).to.contain(\"O campo 'endereco' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'numero' vazio\", function () {\r",
+											"    pm.expect(jsonData[5].Message).to.contain(\"O campo 'numero' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'bairro' vazio\", function () {\r",
+											"    pm.expect(jsonData[6].Message).to.contain(\"O campo 'bairro' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cidade' vazio\", function () {\r",
+											"    pm.expect(jsonData[7].Message).to.contain(\"O campo 'cidade' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'estado' vazio\", function () {\r",
+											"    pm.expect(jsonData[8].Message).to.contain(\"O campo 'estado' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'telefone_fixo' vazio\", function () {\r",
+											"    pm.expect(jsonData[9].Message).to.contain(\"O campo 'telefone_fixo' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'celular' vazio\", function () {\r",
+											"    pm.expect(jsonData[10].Message).to.contain(\"O campo 'celular' está vazio\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"\",\r\n        \"cpf\": \"\",\r\n        \"data_nasc\": \"\",\r\n        \"cep\": \"\",\r\n        \"endereco\": \"\",\r\n        \"numero\": \"\",\r\n        \"bairro\": \"\",\r\n        \"cidade\": \"\",\r\n        \"estado\": \"\",\r\n        \"telefone_fixo\": \"\",\r\n        \"celular\": \"\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Campos Obrigatórios",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'nome' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'nome' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cpf' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'cpf' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'data_nasc' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'data_nasc' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cep' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'cep' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'endereco' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[4].Message).to.contain(\"O campo 'endereco' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'numero' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[5].Message).to.contain(\"O campo 'numero' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'bairro' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[6].Message).to.contain(\"O campo 'bairro' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cidade' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[7].Message).to.contain(\"O campo 'cidade' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'estado' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[8].Message).to.contain(\"O campo 'estado' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'celular' é obrigatório\", function () {\r",
+											"    pm.expect(jsonData[9].Message).to.contain(\"O campo 'celular' é obrigatório\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n     \"telefone_fixo\": \"(11) 4655-9988\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Tipagem Inválida",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'nome' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'nome' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cpf' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'cpf' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'data_nasc' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'data_nasc' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cep' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'cep' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'endereco' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[4].Message).to.contain(\"O campo 'endereco' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'numero' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[5].Message).to.contain(\"O campo 'numero' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'bairro' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[6].Message).to.contain(\"O campo 'bairro' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cidade' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[7].Message).to.contain(\"O campo 'cidade' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'estado' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[8].Message).to.contain(\"O campo 'estado' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'telefone_fixo' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[9].Message).to.contain(\"O campo 'telefone_fixo' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'celular' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[10].Message).to.contain(\"O campo 'celular' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": 123,\r\n        \"cpf\": \"12345678910\",\r\n        \"data_nasc\": \"20/13/2020\",\r\n        \"cep\": \"12345000\",\r\n        \"endereco\": \"12345678\",\r\n        \"numero\": \"abc\",\r\n        \"bairro\": \"555\",\r\n        \"cidade\": \"555\",\r\n        \"estado\": \"55\",\r\n        \"telefone_fixo\": \"1148877665\",\r\n        \"celular\": \"11998877665\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401 - Não Autorizado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Usuário não Autorizado\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"Usuário não está autorizado, faça login novamente\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "abc",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Marli Beatriz Cardoso\",\r\n        \"cpf\": \"843.147.294-49\",\r\n        \"data_nasc\": \"13/02/1985\",\r\n        \"cep\": \"27320-440\",\r\n        \"endereco\": \"Rua Rosalina da Silva Dias\",\r\n        \"numero\": 495,\r\n        \"bairro\": \"Vista Alegre\",\r\n        \"cidade\": \"Barra Mansa\",\r\n        \"estado\": \"RJ\",\r\n        \"celular\": \"(24) 98702-0768\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "403 - Sem Permissão",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Usuário sem Permissão\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"Usuário não tem permissão para acessar o recurso\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_403}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Marli Beatriz Cardoso\",\r\n        \"cpf\": \"843.147.294-49\",\r\n        \"data_nasc\": \"13/02/1985\",\r\n        \"cep\": \"27320-440\",\r\n        \"endereco\": \"Rua Rosalina da Silva Dias\",\r\n        \"numero\": 495,\r\n        \"bairro\": \"Vista Alegre\",\r\n        \"cidade\": \"Barra Mansa\",\r\n        \"estado\": \"RJ\",\r\n        \"celular\": \"(24) 98702-0768\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/cadastrar",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "PUT /atualizar",
+			"item": [
+				{
+					"name": "POST /login",
+					"item": [
+						{
+							"name": "200 - Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"token = jsonData.token;\r",
+											"\r",
+											"pm.globals.set(\"TOKEN_200\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\" : \"admin\",\r\n    \"senha\" : \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/login",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Login User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"token = jsonData.token;\r",
+											"\r",
+											"pm.globals.set(\"TOKEN_403\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\" : \"user\",\r\n    \"senha\" : \"abc\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/login",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "2XX",
+					"item": [
+						{
+							"name": "200 - Sucesso Parcial",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"id\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"nome\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"idade\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"cpf\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"data_nasc\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"cep\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"endereco\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"numero\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"bairro\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"cidade\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"estado\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"telefone_fixo\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"celular\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\"id\",\"nome\",\"idade\",\"cpf\",\"data_nasc\",\"cep\",\"endereco\",\"numero\",\"bairro\",\"cidade\",\"estado\",\"celular\"]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"cep\": \"08573-560\",\r\n        \"endereco\": \"Rua Alegrete\",\r\n        \"numero\": 16,\r\n        \"bairro\": \"Jardim Gonçalves\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Sucesso Completo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"id\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"nome\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"idade\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"cpf\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"data_nasc\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"cep\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"endereco\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"numero\": {\r",
+											"      \"type\": \"integer\"\r",
+											"    },\r",
+											"    \"bairro\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"cidade\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"estado\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"telefone_fixo\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"celular\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\"id\",\"nome\",\"idade\",\"cpf\",\"data_nasc\",\"cep\",\"endereco\",\"numero\",\"bairro\",\"cidade\",\"estado\",\"celular\"]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Sophie Emanuelly Larissa da Rocha\",\r\n        \"cpf\": \"563.744.882-53\",\r\n        \"data_nasc\": \"20/02/1981\",\r\n        \"cep\": \"31130-493\",\r\n        \"endereco\": \"Rua Javari\",\r\n        \"numero\": 135,\r\n        \"bairro\": \"Renascença\",\r\n        \"cidade\": \"Belo Horizonte\",\r\n        \"estado\": \"MG\",\r\n        \"telefone_fixo\": \"(31) 3723-6675\",\r\n        \"celular\": \"(31) 99107-6113\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "4XX",
+					"item": [
+						{
+							"name": "400 - Request Body sem preencher",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Erro do Body Request sem preencher\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O Body da Request está vazio, favor preencher\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Query Request preenchida",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Erro do Query Paramns preenchido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"Os Query params da Request precisam estar vazios\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Caio Lima Ferreira\",\r\n        \"cpf\": \"420.309.470-40\",\r\n        \"data_nasc\": \"12/05/1995\",\r\n        \"cep\": \"08576-260\",\r\n        \"endereco\": \"Rua Colômbia\",\r\n        \"numero\": 856,\r\n        \"bairro\": \"Vila Virgínia\",\r\n        \"cidade\": \"Itaquaquecetuba\",\r\n        \"estado\": \"SP\",\r\n        \"telefone_fixo\": \"(11) 2262-9966\",\r\n        \"celular\": \"(11) 98233-8744\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id?Query=preenchida",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"query": [
+										{
+											"key": "Query",
+											"value": "preenchida"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Campos Inexistentes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'id' não é válido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'id' não é válido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'idade' não é válido\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'idade' não é válido\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'genero' não é válido\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'genero' não é válido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'UF' não é válido\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'UF' não é válido\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"id\": 3,\r\n        \"nome\": \"Caio Lima Ferreira\",\r\n        \"idade\": 26,\r\n        \"cpf\": \"420.309.470-40\",\r\n        \"data_nasc\": \"12/05/1995\",\r\n        \"genero\": \"masculino\",\r\n        \"cep\": \"08576-260\",\r\n        \"endereco\": \"Rua Colômbia\",\r\n        \"numero\": 856,\r\n        \"bairro\": \"Vila Virgínia\",\r\n        \"cidade\": \"Itaquaquecetuba\",\r\n        \"UF\": \"SP\",\r\n        \"telefone_fixo\": \"(11) 2262-9966\",\r\n        \"celular\": \"(11) 98233-8744\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Parametros em Branco",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'nome' vazio\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'nome' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cpf' vazio\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'cpf' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'data_nasc' vazio\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'data_nasc' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cep' vazio\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'cep' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'endereco' vazio\", function () {\r",
+											"    pm.expect(jsonData[4].Message).to.contain(\"O campo 'endereco' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'numero' vazio\", function () {\r",
+											"    pm.expect(jsonData[5].Message).to.contain(\"O campo 'numero' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'bairro' vazio\", function () {\r",
+											"    pm.expect(jsonData[6].Message).to.contain(\"O campo 'bairro' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cidade' vazio\", function () {\r",
+											"    pm.expect(jsonData[7].Message).to.contain(\"O campo 'cidade' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'estado' vazio\", function () {\r",
+											"    pm.expect(jsonData[8].Message).to.contain(\"O campo 'estado' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'telefone_fixo' vazio\", function () {\r",
+											"    pm.expect(jsonData[9].Message).to.contain(\"O campo 'telefone_fixo' está vazio\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'celular' vazio\", function () {\r",
+											"    pm.expect(jsonData[10].Message).to.contain(\"O campo 'celular' está vazio\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"\",\r\n        \"cpf\": \"\",\r\n        \"data_nasc\": \"\",\r\n        \"cep\": \"\",\r\n        \"endereco\": \"\",\r\n        \"numero\": \"\",\r\n        \"bairro\": \"\",\r\n        \"cidade\": \"\",\r\n        \"estado\": \"\",\r\n        \"telefone_fixo\": \"\",\r\n        \"celular\": \"\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Tipagem Inválida",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'nome' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O campo 'nome' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cpf' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[1].Message).to.contain(\"O campo 'cpf' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'data_nasc' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[2].Message).to.contain(\"O campo 'data_nasc' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cep' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[3].Message).to.contain(\"O campo 'cep' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'endereco' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[4].Message).to.contain(\"O campo 'endereco' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'numero' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[5].Message).to.contain(\"O campo 'numero' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'bairro' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[6].Message).to.contain(\"O campo 'bairro' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'cidade' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[7].Message).to.contain(\"O campo 'cidade' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'estado' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[8].Message).to.contain(\"O campo 'estado' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'telefone_fixo' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[9].Message).to.contain(\"O campo 'telefone_fixo' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Campo 'celular' com formato inválido\", function () {\r",
+											"    pm.expect(jsonData[10].Message).to.contain(\"O campo 'celular' está com formato inválido\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": 123,\r\n        \"cpf\": \"12345678910\",\r\n        \"data_nasc\": \"20/13/2020\",\r\n        \"cep\": \"12345000\",\r\n        \"endereco\": \"12345678\",\r\n        \"numero\": \"abc\",\r\n        \"bairro\": \"555\",\r\n        \"cidade\": \"555\",\r\n        \"estado\": \"55\",\r\n        \"telefone_fixo\": \"1148877665\",\r\n        \"celular\": \"11998877665\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401 - Não Autorizado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Usuário não Autorizado\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"Usuário não está autorizado, faça login novamente\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "abc",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Marli Beatriz Cardoso\",\r\n        \"cpf\": \"843.147.294-49\",\r\n        \"data_nasc\": \"13/02/1985\",\r\n        \"cep\": \"27320-440\",\r\n        \"endereco\": \"Rua Rosalina da Silva Dias\",\r\n        \"numero\": 495,\r\n        \"bairro\": \"Vista Alegre\",\r\n        \"cidade\": \"Barra Mansa\",\r\n        \"estado\": \"RJ\",\r\n        \"celular\": \"(24) 98702-0768\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "403 - Sem Permissão",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Usuário sem Permissão\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"Usuário não tem permissão para acessar o recurso\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_403}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Marli Beatriz Cardoso\",\r\n        \"cpf\": \"843.147.294-49\",\r\n        \"data_nasc\": \"13/02/1985\",\r\n        \"cep\": \"27320-440\",\r\n        \"endereco\": \"Rua Rosalina da Silva Dias\",\r\n        \"numero\": 495,\r\n        \"bairro\": \"Vista Alegre\",\r\n        \"cidade\": \"Barra Mansa\",\r\n        \"estado\": \"RJ\",\r\n        \"celular\": \"(24) 98702-0768\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404 - ID não encontrado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"ID não encontrado\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"O campo 'id' não foi encontrado\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n        \"nome\": \"Sophie Emanuelly Larissa da Rocha\",\r\n        \"cpf\": \"563.744.882-53\",\r\n        \"data_nasc\": \"20/02/1981\",\r\n        \"cep\": \"31130-493\",\r\n        \"endereco\": \"Rua Javari\",\r\n        \"numero\": 135,\r\n        \"bairro\": \"Renascença\",\r\n        \"cidade\": \"Belo Horizonte\",\r\n        \"estado\": \"MG\",\r\n        \"telefone_fixo\": \"(31) 3723-6675\",\r\n        \"celular\": \"(31) 99107-6113\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/atualizar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"atualizar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "a"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "DELETE /deletar",
+			"item": [
+				{
+					"name": "POST /login",
+					"item": [
+						{
+							"name": "200 - Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"token = jsonData.token;\r",
+											"\r",
+											"pm.globals.set(\"TOKEN_200\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\" : \"admin\",\r\n    \"senha\" : \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/login",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Login User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"token = jsonData.token;\r",
+											"\r",
+											"pm.globals.set(\"TOKEN_403\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\" : \"user\",\r\n    \"senha\" : \"abc\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/login",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "2XX",
+					"item": [
+						{
+							"name": "204 - Sucesso",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code é 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/deletar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"deletar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "204 - Sucesso",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code é 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/deletar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"deletar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "7"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "4XX",
+					"item": [
+						{
+							"name": "400 - Request Body preenchido",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Erro do Body Request preenchido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"O Body da Request precisa estar vazio\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"body\":\"preenchido\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/deletar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"deletar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "400 - Query Request preenchida",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"  \"type\": \"array\",\r",
+											"  \"items\": [\r",
+											"    {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"Message\": {\r",
+											"          \"type\": \"string\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\"Message\"]\r",
+											"    }\r",
+											"  ]\r",
+											"};\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Erro do Query Paramns preenchido\", function () {\r",
+											"    pm.expect(jsonData[0].Message).to.contain(\"Os Query params da Request precisam estar vazios\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/deletar/:id?Query=preenchida",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"deletar",
+										":id"
+									],
+									"query": [
+										{
+											"key": "Query",
+											"value": "preenchida"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401 - Não Autorizado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Usuário não Autorizado\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"Usuário não está autorizado, faça login novamente\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "abc",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/deletar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"deletar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "403 - Sem Permissão",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Usuário sem Permissão\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"Usuário não tem permissão para acessar o recurso\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_403}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/deletar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"deletar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404 - ID não encontrado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const schema = {\r",
+											"    \"type\": \"object\",\r",
+											"    \"properties\": {\r",
+											"      \"Message\": {\r",
+											"        \"type\": \"string\"\r",
+											"      }\r",
+											"    },\r",
+											"    \"required\": [\"Message\"]\r",
+											"  };\r",
+											"\r",
+											"pm.test(\"O Schema do retorno é válido\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.response.to.have.jsonSchema(schema);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Status code é 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"ID não encontrado\", function () {\r",
+											"    pm.expect(jsonData.Message).to.contain(\"O campo 'id' não foi encontrado\");\r",
+											"});\r",
+											"\r",
+											"const response_time = Number(pm.globals.get(\"TEST_RESPONSE_TIME_IN_MS\"));\r",
+											"\r",
+											"pm.test(\"Response time está menor que \" + response_time + \" ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(response_time);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN_200}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{AMBIENTE}}/clientes/deletar/:id",
+									"host": [
+										"{{AMBIENTE}}"
+									],
+									"path": [
+										"clientes",
+										"deletar",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "a"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

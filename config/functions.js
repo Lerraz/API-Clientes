@@ -29,34 +29,54 @@ function PreValidação(array_data, BodyValue, QueryValue) {
     if (QueryValue != undefined) {
         if (QueryValue == false) {
             if (Object.values(array_data.query) != '')
-                ArrayError.push({ 'Message': 'Os Query paramns da Request precisam estar vazios' })
+                ArrayError.push({ 'Message': 'Os Query params da Request precisam estar vazios' })
         }
         if (QueryValue == true) {
             if (Object.values(array_data.query) == '')
-                ArrayError.push({ 'Message': 'Os Querys paramans da Request estão vazios, favor preencher' })
+                ArrayError.push({ 'Message': 'Os Querys params da Request estão vazios, favor preencher' })
         }
     }
     return ArrayError
 }
-function CampoInexistente(array_data) {
+function CampoInexistente(array_data, tipo) {
     ArrayError = []
-    for (let i = 0; i < Object.entries(array_data).length; i++) {
-        if (Object.keys(array_data)[i] != 'nome' &&
-            Object.keys(array_data)[i] != 'idade' &&
-            Object.keys(array_data)[i] != 'cpf' &&
-            Object.keys(array_data)[i] != 'data_nasc' &&
-            Object.keys(array_data)[i] != 'cep' &&
-            Object.keys(array_data)[i] != 'endereco' &&
-            Object.keys(array_data)[i] != 'numero' &&
-            Object.keys(array_data)[i] != 'bairro' &&
-            Object.keys(array_data)[i] != 'cidade' &&
-            Object.keys(array_data)[i] != 'estado' &&
-            Object.keys(array_data)[i] != 'telefone_fixo' &&
-            Object.keys(array_data)[i] != 'celular') {
-            ArrayError.push({ 'Message': `O campo '${Object.keys(array_data)[i]}' não é válido` })
+    if (parseInt(tipo) === 1) {
+        for (let i = 0; i < Object.entries(array_data).length; i++) {
+            if (Object.keys(array_data)[i] != 'nome' &&
+                Object.keys(array_data)[i] != 'idade' &&
+                Object.keys(array_data)[i] != 'cpf' &&
+                Object.keys(array_data)[i] != 'data_nasc' &&
+                Object.keys(array_data)[i] != 'cep' &&
+                Object.keys(array_data)[i] != 'endereco' &&
+                Object.keys(array_data)[i] != 'numero' &&
+                Object.keys(array_data)[i] != 'bairro' &&
+                Object.keys(array_data)[i] != 'cidade' &&
+                Object.keys(array_data)[i] != 'estado' &&
+                Object.keys(array_data)[i] != 'telefone_fixo' &&
+                Object.keys(array_data)[i] != 'celular') {
+                ArrayError.push({ 'Message': `O campo '${Object.keys(array_data)[i]}' não é válido` })
+            }
         }
+        return ArrayError
     }
-    return ArrayError
+    if (parseInt(tipo) === 2 ){
+        for (let i = 0; i < Object.entries(array_data).length; i++) {
+            if (Object.keys(array_data)[i] != 'nome' &&
+                Object.keys(array_data)[i] != 'cpf' &&
+                Object.keys(array_data)[i] != 'data_nasc' &&
+                Object.keys(array_data)[i] != 'cep' &&
+                Object.keys(array_data)[i] != 'endereco' &&
+                Object.keys(array_data)[i] != 'numero' &&
+                Object.keys(array_data)[i] != 'bairro' &&
+                Object.keys(array_data)[i] != 'cidade' &&
+                Object.keys(array_data)[i] != 'estado' &&
+                Object.keys(array_data)[i] != 'telefone_fixo' &&
+                Object.keys(array_data)[i] != 'celular') {
+                ArrayError.push({ 'Message': `O campo '${Object.keys(array_data)[i]}' não é válido` })
+            }
+        }
+        return ArrayError
+    }
 }
 function ParametroBranco(array_data) {
     ArrayError = []
@@ -313,7 +333,7 @@ function CadastrarDados(array_data, db) {
     }
 
     for (let i = 0; i < (Object.keys(array_data).length); i++) {
-        if (Object.keys(array_data)[i] == 'numero') meuObj.numero = (`${Object.values(array_data)[i]}`)
+        if (Object.keys(array_data)[i] == 'numero') meuObj.numero = parseInt(`${Object.values(array_data)[i]}`)
     }
 
     for (let i = 0; i < (Object.keys(array_data).length); i++) {
@@ -386,7 +406,7 @@ function AtualizaDados(array_data, db, id) {
             }
 
             for (let i = 0; i < (Object.keys(array_data).length); i++) {
-                if (Object.keys(array_data)[i] == 'numero') item.numero = (`${Object.values(array_data)[i]}`)
+                if (Object.keys(array_data)[i] == 'numero') item.numero = parseInt(`${Object.values(array_data)[i]}`)
             }
 
             for (let i = 0; i < (Object.keys(array_data).length); i++) {
@@ -435,7 +455,7 @@ function DeletaDados(db, id) {
     return newDB
 }
 
-module.exports = { 
+module.exports = {
     verifyJWT: verifyJWT,
     PreValidação: PreValidação,
     CampoInexistente: CampoInexistente,
@@ -447,4 +467,5 @@ module.exports = {
     AtualizaDados: AtualizaDados,
     ImprimeDadosAtualizado: ImprimeDadosAtualizado,
     VerificaID: VerificaID,
-    DeletaDados: DeletaDados};
+    DeletaDados: DeletaDados
+};

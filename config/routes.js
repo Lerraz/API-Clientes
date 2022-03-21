@@ -29,8 +29,8 @@ routes.get('/clientes/listar', fn.verifyJWT, (req, res) => {
     if (Object.entries(req.query).length == 0)
         return res.status(200).json(db)
 
-    if (Object.entries(fn.CampoInexistente(req.query)).length != 0)
-        return res.status(400).json(fn.CampoInexistente(req.query))
+    if (Object.entries(fn.CampoInexistente(req.query, 1)).length != 0)
+        return res.status(400).json(fn.CampoInexistente(req.query, 1))
 
     if (Object.entries(fn.ParametroBranco(req.query)).length != 0)
         return res.status(400).json(fn.ParametroBranco(req.query))
@@ -46,8 +46,8 @@ routes.post('/clientes/cadastrar', fn.verifyJWT, (req, res) => {
     if (Object.entries(fn.PreValidação(req, true, false)) != '')
         return res.status(400).json(fn.PreValidação(req, true, false))
 
-    if (Object.entries(fn.CampoInexistente(req.body)).length != 0)
-        return res.status(400).json(fn.CampoInexistente(req.body))
+    if (Object.entries(fn.CampoInexistente(req.body, 2)).length != 0)
+        return res.status(400).json(fn.CampoInexistente(req.body, 2))
 
     if (Object.entries(fn.ParametroBranco(req.body)).length != 0)
         return res.status(400).json(fn.ParametroBranco(req.body))
@@ -71,8 +71,8 @@ routes.put('/clientes/atualizar/:id', fn.verifyJWT, (req, res) => {
     if (fn.VerificaID(db, parseInt(req.params.id)) < 1)
         return res.status(404).json({ 'Message': 'O campo \'id\' não foi encontrado' })
 
-    if (Object.entries(fn.CampoInexistente(req.body)).length != 0)
-        return res.status(400).json(fn.CampoInexistente(req.body))
+    if (Object.entries(fn.CampoInexistente(req.body, 2)).length != 0)
+        return res.status(400).json(fn.CampoInexistente(req.body, 2))
 
     if (Object.entries(fn.ParametroBranco(req.body)).length != 0)
         return res.status(400).json(fn.ParametroBranco(req.body))

@@ -4,7 +4,9 @@
   "description": "Primeira API criada para testes em postman",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "newman": "newman run postman_collection.json --globals postman_globals.json",
+    "extranewman": "newman run postman_collection.json --globals postman_globals.json -r htmlextra"
   },
   "author": "",
   "license": "ISC",
